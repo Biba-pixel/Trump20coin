@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>White House Token</title>
+    <link href="https://fonts.cdnjs.com/css2?family=Orbitron:wght@400;600;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.cdnjs.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    <style>
+        :root {
+            --primary-red: #ff1744;
+            --secondary-red: #d50000;
+            --dark-red: #b71c1c;
+            --black: #000000;
+            --dark-gray: #121212;
+            --light-gray: #333333;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            background: var(--black);
+            overflow-x: hidden;
+        }
+
+        body {
+            color: var(--white);
+            line-height: 1.6;
+            min-height: 100vh;
+            background: var(--black);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Page border glow effect */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 2px solid var(--primary-red);
+            pointer-events: none;
+            z-index: 999;
+            animation: borderGlow 3s infinite;
+        }
+
+        @keyframes borderGlow {
+            0%, 100% {
+                box-shadow: 0 0 15px rgba(255, 23, 68, 0.3) inset,
+                           0 0 30px rgba(255, 23, 68, 0.2);
+            }
+            50% {
+                box-shadow: 0 0 25px rgba(255, 23, 68, 0.5) inset,
+                           0 0 50px rgba(255, 23, 68, 0.3);
+            }
+        }
+
+        .section {
+            min-height: 100vh;
+            padding: 6rem 2rem;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: visible;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            text-align: center;
+            background: linear-gradient(135deg, var(--black) 0%, var(--dark-gray) 100%);
+            padding-top: 8rem;
+        }
+
+        .title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4.5rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, var(--white), var(--primary-red));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: var(--primary-red);
+            margin-bottom: 3rem;
+            font-weight: 300;
+        }
+
+        /* Contract Address */
+        .coin-address {
+            background: var(--light-gray);
+            padding: 1.5rem 2.5rem;
+            border-radius: 12px;
+            font-family: monospace;
+            font-size: 1.2rem;
+            margin: 2rem 0;
+            border: 1px solid var(--primary-red);
+            position: relative;
+            overflow: hidden;
+            animation: glow 2s infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(255, 23, 68, 0.2),
+                           0 0 40px rgba(255, 23, 68, 0.1),
+                           0 0 60px rgba(255, 23, 68, 0.1);
+            }
+            50% {
+                box-shadow: 0 0 30px rgba(255, 23, 68, 0.4),
+                           0 0 60px rgba(255, 23, 68, 0.2),
+                           0 0 80px rgba(255, 23, 68, 0.2);
+            }
+        }
+
+        /* Rocket Animation */
+        .rocket {
+            position: fixed;
+            font-size: 2rem;
+            pointer-events: none;
+            z-index: 1000;
+            opacity: 0;
+        }
+
+        @keyframes flyAcross {
+            0% {
+                transform: translateX(-100px);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(calc(100vw + 100px));
+                opacity: 0;
+            }
+        }
+
+        /* Updated Floating Mascot */
+        .floating-mascot {
+            position: fixed;
+            width: 120px;
+            height: 120px;
+            z-index: 1000;
+            pointer-events: none;
+            transition: transform 0.3s ease;
+            animation: popIn 0.5s ease-out;
+            will-change: transform, opacity;
+        }
+
+        .floating-mascot img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 0 10px rgba(255,23,68,0.5));
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.2); opacity: 0.5; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .mascot-speech {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.9);
+            color: var(--primary-red);
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            width: max-content;
+            text-align: center;
+            opacity: 0;
+            transition: all 0.3s ease;
+            border: 1px solid var(--primary-red);
+            box-shadow: 0 0 15px rgba(255,23,68,0.3);
+            transform: translateY(-100%) translateX(-50%);
+            left: 50%;
+            top: -20px;
+        }
+
+        .mascot-speech.show {
+            opacity: 1;
+            top: -30px;
+        }
+
+        .mascot-speech::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid rgba(0, 0, 0, 0.9);
+        }
+
+        /* Social Links */
+        .social-links {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .social-button {
+            background: var(--light-gray);
+            color: var(--white);
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 23, 68, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 0 10px rgba(255, 23, 68, 0.1);
+            position: relative;
+            overflow: hidden;
+            flex: 1;
+            justify-content: center;
+            min-width: 180px;
+        }
+
+        .social-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 23, 68, 0.2),
+                transparent
+            );
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            to {
+                left: 100%;
+            }
+        }
+
+        .social-button:hover {
+            background: var(--primary-red);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 23, 68, 0.3);
+            border-color: var(--primary-red);
+        }
+
+        /* Features Section */
+        .features {
+            background: linear-gradient(45deg, var(--black) 0%, var(--dark-gray) 100%);
+            padding: 8rem 2rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+            width: 100%;
+        }
+
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            color: var(--primary-red);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--white);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .card {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 2.5rem;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 23, 68, 0.1);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 30px rgba(255, 23, 68, 0.1);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary-red);
+            box-shadow: 0 10px 30px rgba(255, 23, 68, 0.2);
+        }
+
+        .card h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            color: var(--primary-red);
+            margin-bottom: 1.5rem;
+        }
+
+        .card p {
+            color: var(--white);
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+
+        /* Operation Plan */
+        .operation-plan {
+            background: linear-gradient(-45deg, var(--black) 0%, var(--dark-gray) 100%);
+            padding: 8rem 2rem;
+        }
+
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+            width: 100%;
+            max-width: 1000px;
+            margin: 2rem auto;
+            position: relative;
+            padding: 2rem;
+        }
+
+        .milestone {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            border: 1px solid var(--primary-red);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .milestone:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 23, 68, 0.2);
+        }
+
+        .milestone h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            color: var(--primary-red);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .milestone h3::before {
+            content: attr(data-step);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: var(--dark-gray);
+            border: 2px solid var(--primary-red);
+            border-radius: 50%;
+            font-size: 1.2rem;
+            box-shadow: 0 0 15px rgba(255, 23, 68, 0.3);
+        }
+
+        .milestone-content {
+            font-size: 1.1rem;
+            color: var(--white);
+            line-height: 1.8;
+        }
+
+        .milestone-content ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .milestone-content li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .milestone-content li::before {
+            content: '•';
+            color: var(--primary-red);
+            position: absolute;
+            left: 0;
+            font-size: 1.5rem;
+            line-height: 1;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 3rem;
+            }
+
+            .subtitle {
+                font-size: 1.2rem;
+            }
+
+            .section {
+                padding: 4rem 1rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .milestone {
+                padding: 1.5rem;
+            }
+
+            .floating-mascot {
+                width: 80px;
+                height: 80px;
+            }
+
+            .mascot-speech {
+                font-size: 0.9rem;
+                padding: 0.8rem 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="section hero">
+        <h1 class="title" data-aos="fade-down">White House Token</h1>
+        <p class="subtitle" data-aos="fade-up">The Future of Patriotic Finance</p>
+        
+        <div class="coin-address" data-aos="zoom-in">
+            0x1234...5678
+        </div>
+
+        <div class="social-links" data-aos="fade-up">
+            <a href="#" class="social-button">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21.5 2L2 9.5l7.5 3L18 4l-8.5 9L18 21l3.5-19z"/>
+                </svg>
+                Telegram
+            </a>
+            <a href="#" class="social-button">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/>
+                </svg>
+                Twitter
+            </a>
+            <a href="#" class="social-button">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 6h18M3 12h18M3 18h18"/>
+                </svg>
+                Trade Now
+            </a>
+        </div>
+    </section>
+
+    <section class="section features">
+        <div class="section-header">
+            <h2 class="section-title" data-aos="fade-down">Features</h2>
+            <p class="section-subtitle" data-aos="fade-up">Built with security and sustainability in mind</p>
+        </div>
+
+        <div class="grid">
+            <div class="card" data-aos="fade-up">
+                <h3>Liquidity Locked</h3>
+                <p>100% of liquidity locked for 4 years ensuring long-term stability and security for all holders</p>
+            </div>
+            <div class="card" data-aos="fade-up" data-aos-delay="100">
+                <h3>Contract Renounced</h3>
+                <p>Contract ownership renounced, guaranteeing no future modifications can be made to the protocol</p>
+            </div>
+            <div class="card" data-aos="fade-up" data-aos-delay="200">
+                <h3>Anti-Dump System</h3>
+                <p>Advanced mechanisms in place to prevent large sell-offs and protect long-term holders</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section operation-plan">
+        <div class="section-header">
+            <h2 class="section-title" data-aos="fade-down">Operation Plan</h2>
+            <p class="section-subtitle" data-aos="fade-up">Strategic milestones for sustainable growth</p>
+        </div>
+
+        <div class="timeline">
+            <div class="milestone" data-aos="fade-up">
+                <h3 data-step="1">Launch Phase</h3>
+                <div class="milestone-content">
+                    <ul>
+                        <li>Initial launch on DEX</li>
+                        <li>Community building & engagement</li>
+                        <li>First marketing campaign launch</li>
+                        <li>Achieve 100K Market Cap milestone</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="milestone" data-aos="fade-up">
+                <h3 data-step="2">Growth Phase</h3>
+                <div class="milestone-content">
+                    <ul>
+                        <li>DEX trending & visibility boost</li>
+                        <li>Strategic influencer partnerships</li>
+                        <li>Community expansion initiatives</li>
+                        <li>Reach 500K Market Cap target</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="milestone" data-aos="fade-up">
+                <h3 data-step="3">Expansion Phase</h3>
+                <div class="milestone-content">
+                    <ul>
+                        <li>CEX listing campaign</li>
+                        <li>Major marketing push</li>
+                        <li>Key partnership announcements</li>
+                        <li>Hit 1M Market Cap goal</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="milestone" data-aos="fade-up">
+                <h3 data-step="4">Acceleration Phase</h3>
+                <div class="milestone-content">
+                    <ul>
+                        <li>Tier 1 exchange listing</li>
+                        <li>Global marketing campaign</li>
+                        <li>Major strategic partnerships</li>
+                        <li>Reach 5M Market Cap milestone</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Floating Mascot -->
+    <div class="floating-mascot">
+        <img src="wht-mascot.png" alt="WHT Mascot">
+        <div class="mascot-speech"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mascot = document.querySelector('.floating-mascot');
+            const speech = document.querySelector('.mascot-speech');
+            let currentSection = 'hero';
+            let isAnimating = false;
+            let lastRocketTime = Date.now();
+            const ROCKET_COOLDOWN = 4000;
+
+            const messages = {
+                hero: ["Welcome to WHT! 🏛️", "Join the revolution! 🚀", "Secure your tokens! 💎"],
+                features: ["Check our features! ✨", "100% Secure! 🔒", "Anti-dump active! 💪"],
+                'operation-plan': ["See our vision! 🎯", "Join the journey! 🚀", "Growing strong! 📈"]
+            };
+
+            // Side positions for mascot
+            const positions = [
+                { side: 'left', x: '5%' },
+                { side: 'right', x: '85%' }
+            ];
+
+            function moveMascot() {
+                if (isAnimating) return;
+                isAnimating = true;
+
+                // Remove previous animation class
+                mascot.style.animation = 'none';
+                mascot.offsetHeight; // Trigger reflow
+
+                // Choose random position from opposite side
+                const currentX = mascot.style.left || '5%';
+                const currentSide = currentX.includes('5') ? 'left' : 'right';
+                const newPos = positions.find(p => p.side !== currentSide);
+
+                // Random vertical position (20% to 80% of viewport height)
+                const randomY = Math.floor(Math.random() * 60 + 20);
+                
+                mascot.style.animation = 'popIn 0.5s ease-out';
+                mascot.style.left = newPos.x;
+                mascot.style.top = `${randomY}%`;
+
+                setTimeout(() => {
+                    showMessage(currentSection);
+                    isAnimating = false;
+                }, 500);
+            }
+
+            function createRocket() {
+                const now = Date.now();
+                if (now - lastRocketTime < ROCKET_COOLDOWN) return;
+                lastRocketTime = now;
+
+                const rocket = document.createElement('div');
+                rocket.className = 'rocket';
+                rocket.textContent = '🛸';
+
+                // Random vertical position between 20% and 80% of viewport height
+                const randomY = 20 + Math.random() * 60;
+                rocket.style.top = `${randomY}vh`;
+                
+                // Set initial position and animation
+                rocket.style.animation = 'flyAcross 3s cubic-bezier(0.4, 0, 0.2, 1) forwards';
+                
+                document.body.appendChild(rocket);
+
+                // Remove rocket after animation
+                setTimeout(() => rocket.remove(), 3000);
+            }
+
+            function showMessage(section) {
+                if (!messages[section]) return;
+                
+                const sectionMessages = messages[section];
+                const message = sectionMessages[Math.floor(Math.random() * sectionMessages.length)];
+                speech.textContent = message;
+                speech.classList.add('show');
+                
+                setTimeout(() => {
+                    speech.classList.remove('show');
+                }, 3000);
+            }
+
+            // Move mascot periodically
+            setInterval(() => {
+                if (Math.random() > 0.6 && !isAnimating) { // 40% chance to move
+                    moveMascot();
+                }
+            }, 5000);
+
+            // Create rockets periodically
+            setInterval(() => {
+                if (Math.random() > 0.7) { // 30% chance to create rocket
+                    createRocket();
+                }
+            }, 5000);
+
+            // Scroll handling with Intersection Observer
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const newSection = entry.target.classList[1];
+                        if (newSection !== currentSection) {
+                            currentSection = newSection;
+                            moveMascot();
+                            if (Math.random() > 0.5) {
+                                setTimeout(createRocket, 300);
+                            }
+                        }
+                    }
+                });
+            }, {
+                threshold: 0.5
+            });
+
+            // Observe all sections
+            document.querySelectorAll('.section').forEach(section => {
+                observer.observe(section);
+            });
+
+            // Initial setup with slight delay
+            setTimeout(() => {
+                const initialPos = positions[0];
+                mascot.style.left = initialPos.x;
+                mascot.style.top = '50%';
+                showMessage('hero');
+                createRocket();
+            }, 1000);
+
+            // Initialize AOS
+            AOS.init({
+                duration: 1000,
+                once: false,
+                mirror: true,
+                offset: 100,
+                easing: 'ease-out-cubic'
+            });
+        });
+    </script>
+</body>
+</html>
